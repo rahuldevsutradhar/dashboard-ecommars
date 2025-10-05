@@ -1,19 +1,19 @@
 const mongoose = require('mongoose')
 
 const catagorySchema = new mongoose.Schema({
-    catagoryName:{
-        type: String,
-        required: true
-    },
-    catagoryTitle:{
-        type: String,
-        required: true
-    },
+    // catagoryName:{
+    //     type: String,
+    //     required: true
+    // },
+    // catagoryTitle:{
+    //     type: String,
+    //     required: true
+    // },
     catagorEmail:{
         type: String,
         required: true
     },
-    catagorImage:{
+    catagoryImage:{
         type: String,
         required: true
     }

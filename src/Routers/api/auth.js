@@ -11,6 +11,5 @@ authRoute.post('/otp', otpVerification)
 authRoute.post('/reSendOtp', reSendOtp)
 authRoute.post('/login', loginController)
 authRoute.post('/updateProfile', tokenVerify, upload.single('avatar'),  updateProfileController)
-authRoute.post('/products',  product_upload)
 
 module.exports = authRoute

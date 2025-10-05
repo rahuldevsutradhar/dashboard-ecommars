@@ -127,10 +127,7 @@ const reSendOtp = async (req, res)=> {
 // ---------- Login -----------------
 const loginController =async (req, res)=>{
     
-    try {
-        console.log("req:" , req.body);
-        
-        const {email , password}= req.body
+    const {email , password}= req.body
     if (!email || !password ) return res.status(404).send('user Invalid')
     if (!emailRegex.test(email) || !passwordRegex.test(password)) return res.status(401).send('email or password invalid')
 
@@ -150,18 +147,13 @@ const loginController =async (req, res)=>{
                 "email" : exsitUser.email ,
                 "phone" : exsitUser.phone ,
                 "password" : exsitUser.password ,
-                "address"  : exsitUser.address,
+                "gender" : exsitUser.gender ,
                 "avater" : exsitUser.avater 
                 
             }
 
     res.status(200).send( {userData: userInfo , accessToken : jwtToken} )
-    } catch (err) {
-        console.log(err);
-         res.status(500).send("Server error");
-    }
 }
-
 // ---------- Update Profile -----------------
 const updateProfileController = async (req, res) => {
     try {

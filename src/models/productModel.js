@@ -7,10 +7,12 @@ const productSchma = new mongoose.Schema({
             type:String,
             default:null,
             enum:['color' , 'size']
-        },verifyValue:{
+        },
+        verifyValue:{
             type:String,
             default:null
-        },additionalCharges:{
+        },
+        additionalCharges:{
             type:String,
             default:null
         }
