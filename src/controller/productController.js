@@ -13,29 +13,43 @@ cloudinary.config({
 
 // --------------- add_category ----------
 const add_catagory = async (req, res) => {
-    try {
-        const catagoryImage = await cloudinary.uploader.upload(
-            req.file.path, {
-            public_id: Date.now(),
+    
+  try {
+    const {catagoryName} = req.body
+    const exsiteCatagory = await catagoryItem.find({catagoryName})
+    if(exsiteCatagory) return res.status(400).send(' catagory already exisit')
+      
+    if (!req.file) {
+      return res.status(400).send("Please upload a category image");
+    }
+
+    const catagoryImage = await 
+    cloudinary.uploader.upload(req.file.path, 
+        {
+             public_id: Date.now(),
         });
 
-        const creatorUser = await authModel.findOne({ email: req.user.email });
+    const creatorUser = await authModel.findOne({ email: req.user.email });
+    if (!creatorUser) return res.status(404).send("User not found");
+    if (!catagoryImage || !catagoryImage.url) {
+      return res.status(400).send("Category image upload failed");
+    }
 
-        if (!creatorUser)return res.status(404).send("User not found");       
-        if (!catagoryImage || !catagoryImage.url)return res.status(400).send("Category image upload failed");
-        
-        await new catagoryItem({
-            // categoryName: creatorUser.userName,
-            catagoryImage: catagoryImage.url,
-            catagorEmail: creatorUser.email,
-        }).save();
-        
-        res.status(200).send("Category uploaded successfully");
-    }
-    catch (error) {
-        console.log(error);
-    }
-}
+    await new catagoryItem({
+      catagoryName,
+      catagorName : creatorUser.userName,
+      catagoryImage: catagoryImage.url,
+      catagorEmail: creatorUser.email,
+    }).save();
+
+    res.status(200).send("Category uploaded successfully");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal server error");
+  }
+};
+
+
 
 
 

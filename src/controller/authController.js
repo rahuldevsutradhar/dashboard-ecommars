@@ -137,8 +137,9 @@ const loginController =async (req, res)=>{
 
         const match = await bcrypt.compare(password, exsitUser.password)
            if(!match) return  res.status(406).send('Wrong password') 
-
-            var jwtToken = jwt.sign({ email : exsitUser.email }, process.env.jwt_seccret , {expiresIn : '2h'});
+              
+              
+            var jwtToken = jwt.sign({ email : exsitUser.email, role: exsitUser.userRole }, process.env.jwt_seccret , {expiresIn : '6h'});
 
             const userInfo  = {
 
