@@ -10,11 +10,11 @@ const productSchma = new mongoose.Schema({
         type:String,
         default:null
       },
-      thubnilImage:{
+      mainImaage:{
          type:String,
          required:true
       },
-      productSubImage:[],
+      subImage:[],
       productTitle:{
          type:String,
          required:true
@@ -23,10 +23,7 @@ const productSchma = new mongoose.Schema({
          type:String,
          required:true
       },
-      productPrice:{
-         type:String,
-         required:true
-      },
+      
       productReview:[{
         reviewerName:{type:String, default:null},
         revieweRating:{type:String, default:null},
@@ -37,7 +34,7 @@ const productSchma = new mongoose.Schema({
       adminApproval:{
         type:String,
         default:'pandding',
-        enum:['acceptable', 'pandding', 'rejected']
+        enum:['approved', 'pandding', 'rejected']
       },
       productVarient:{
         type:String,
@@ -63,11 +60,19 @@ const productSchma = new mongoose.Schema({
          type:String,
          required:true
       },
+      productCatagoryId:{
+        type: mongoose.Schema.ObjectId,
+        required: true
+      },
       veriyent : [{
         veriyentName:{type:String, default:null, enum:['color' , 'size']},
         verifyValue:{type:String, default:null},
         additionalCharges:{ type:String, default:null }
-      }]
+      }],
+      price:{
+         type:String,
+         required:true
+      }
 })
 
 

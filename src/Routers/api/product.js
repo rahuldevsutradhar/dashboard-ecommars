@@ -14,6 +14,6 @@ const productRoute = express.Router();
 
 productRoute.post( '/category', tokenVerify, roleChecker(['admin', 'staff']), upload.single('productCatagory'), add_catagory)
 
-productRoute.post('/uploadProduct', uploadMiddleware, product_upload);
+productRoute.post('/uploadProduct', uploadMiddleware , product_upload);
 
 module.exports = productRoute;
