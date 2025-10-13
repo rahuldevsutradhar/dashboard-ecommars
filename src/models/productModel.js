@@ -4,7 +4,7 @@ const mongoose = require('mongoose')
 const productSchma = new mongoose.Schema({
       ProductImage:{
         type:String,
-        required:true
+       default:null
       },
       productTag:{
         type:String,
@@ -52,10 +52,6 @@ const productSchma = new mongoose.Schema({
         type:String,
          required:true
       },
-      productCatagory:{
-         type:String,
-         required:true
-      },
       stock:{
          type:String,
          required:true
@@ -66,7 +62,7 @@ const productSchma = new mongoose.Schema({
       },
       veriyent : [{
         veriyentName:{type:String, default:null, enum:['color' , 'size']},
-        verifyValue:{type:String, default:null},
+        verifyValue:[],
         additionalCharges:{ type:String, default:null }
       }],
       price:{
