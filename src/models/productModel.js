@@ -66,7 +66,7 @@ const productSchma = new mongoose.Schema({
         additionalCharges:{ type:String, default:null }
       }],
       price:{
-         type:String,
+         type:Number,
          required:true
       }
 })

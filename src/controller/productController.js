@@ -1,3 +1,4 @@
+const { default: mongoose } = require("mongoose");
 const generateSlug = require("../helpers/slugGenarator");
 const authModel = require("../models/authModel");
 const catagoryItem = require("../models/catagoryItem");
@@ -92,13 +93,102 @@ const product_upload = async (req, res) => {
     productTag,
     productCatagoryId,
     price,
-    discountPrice ,
+    discountPrice,
     slug,
-    mainImaage : mainImaage.url ,
+    mainImaage: mainImaage.url,
     subImage
   }).save()
 
   res.send('catagory  product uploaded')
 }
 
-module.exports = { add_catagory, product_upload };
+
+// -------------------------------- product_UpDate -----------------------------------------
+const product_update = async (req, res) => {
+  try {
+    const {
+      mainImaage,
+      subImage,
+      productTitle,
+      productDescribtion,
+      discountPersent,
+      veriyent,
+      stock,
+      productTag,
+      productCatagoryId,
+      price,
+      slug
+    } = req.body;
+
+    // ---------- Find product ----------
+    const exisitProduct = await productModel.findOne({ slug });
+    if (!exisitProduct) return res.status(404).send("Product not found ❌");
+
+
+      // ---------- Delete old images from cloudinary ----------
+    if (exisitProduct.mainImaage) {
+      await cloudinary.uploader.destroy(
+        exisitProduct.mainImaage.split("/").slice(7).join("/").split(".")[0]
+      );
+    }
+
+    if (Array.isArray(exisitProduct.subImage) && exisitProduct.subImage.length > 0) {
+      await Promise.all(
+        exisitProduct.subImage.map(async (item) => {
+          await cloudinary.uploader.destroy(
+            item.split("/").slice(7).join("/").split(".")[0]
+          );
+        })
+      );
+    }
+
+    // ---------- Update product fields ----------
+    if (productTitle) {
+      exisitProduct.productTitle = productTitle;
+      exisitProduct.slug = generateSlug(productTitle);
+    }
+
+    if (productDescribtion) exisitProduct.productDescribtion = productDescribtion;
+    if (veriyent) exisitProduct.veriyent = JSON.parse(veriyent);
+    if (stock !== undefined && stock !== null) exisitProduct.stock = stock;
+    if (productTag) exisitProduct.productTag = productTag;
+    if (productCatagoryId) exisitProduct.productCatagoryId = productCatagoryId;
+
+    // ---------- Price & Discount Logic ----------
+    // handle price update first
+    if (price !== undefined && price !== null) {
+      exisitProduct.price = price;
+    }
+
+    // then handle discount
+    if (discountPersent !== undefined && discountPersent !== null) {
+      exisitProduct.discountPersent = discountPersent;
+
+      // use latest price (either new one or existing one)
+      const basePrice = price ?? exisitProduct.price;
+      exisitProduct.discountPrice = basePrice - (basePrice * discountPersent) / 100;
+    } else {
+      // no discount change, but if price changed then recalc using existing discount
+      const discount = exisitProduct.discountPersent || 0;
+      const basePrice = price ?? exisitProduct.price;
+      exisitProduct.discountPrice = basePrice - (basePrice * discount) / 100;
+    }
+    
+    if(mainImaage) exisitProduct.mainImaage = mainImaage.url
+    if(subImage) exisitProduct.subImage = subImage
+
+
+    // ---------- Save updated product ----------
+    await exisitProduct.save();
+
+  
+
+    res.status(200).send("✅ Product updated successfully");
+
+  } catch (error) {
+    console.error("Product update error:", error);
+    res.status(500).send("Server error during update ❌");
+  }
+};
+
+module.exports = { add_catagory, product_upload, product_update };
