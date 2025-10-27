@@ -225,9 +225,22 @@ const give_review = async (req , res)=>{
 }
 
 
+// --------------------------------get single product-----------------------------------------
+
+const singleProduct = async (req, res)=>{
+  const {slug} = req.params
+  const exisitProduct = await productModel.findOne({slug})
+             if(!exisitProduct) return res.status(404).send('product not found')
+
+        res.status(200).send(exisitProduct)
+
+}
+
+
 module.exports = { add_catagory ,
    product_upload , 
    product_update ,
     admin_approval ,
-    give_review
+    give_review ,
+    singleProduct
   };
