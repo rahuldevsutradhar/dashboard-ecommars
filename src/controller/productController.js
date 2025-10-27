@@ -178,7 +178,6 @@ const product_update = async (req, res) => {
     if(subImage) exisitProduct.subImage = subImage
 
 
-    // ---------- Save updated product ----------
     await exisitProduct.save();
 
   
@@ -191,4 +190,10 @@ const product_update = async (req, res) => {
   }
 };
 
-module.exports = { add_catagory, product_upload, product_update };
+
+// -------------------------------- Admin approval -----------------------------------------
+
+const admin_approval = (req , res)=>{
+  const {slug , status}
+}
+module.exports = { add_catagory, product_upload, product_update , admin_approval };
