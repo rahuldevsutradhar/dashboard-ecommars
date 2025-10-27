@@ -193,7 +193,41 @@ const product_update = async (req, res) => {
 
 // -------------------------------- Admin approval -----------------------------------------
 
-const admin_approval = (req , res)=>{
-  const {slug , status}
+const admin_approval = async (req , res)=>{
+  const { slug , status} = req.body
+
+  if(status != "approved" && status != "rejected") return res.status(400).send('wrong status use approved or rejected status ')
+
+    const exisitProduct = await productModel.findOne({slug})
+    if(!exisitProduct) return res.status(404).send('product not found')
+
+      exisitProduct.adminApproval = status
+     await exisitProduct.save()
+
+     res.status(200).send('status update sucessfull')
 }
-module.exports = { add_catagory, product_upload, product_update , admin_approval };
+
+
+// -------------------------------- give review -----------------------------------------
+const give_review = async (req , res)=>{
+    const { slug , reviewerName , revieweRating , revieweComent } = req.body
+        if(!reviewerName || !revieweRating || !revieweComent ) 
+          return res.status(400).send('All filled is required ')
+    
+    const exisitProduct = await productModel.findOne({slug})
+           if(!exisitProduct) return res.status(404).send('product not found')
+    
+      exisitProduct.productReview.push ({reviewerName , revieweRating , revieweComent , revieweDate : new Date().toLocaleString()})
+    
+      await exisitProduct.save()
+
+      res.status(200).send('review send sucessfull')
+}
+
+
+module.exports = { add_catagory ,
+   product_upload , 
+   product_update ,
+    admin_approval ,
+    give_review
+  };

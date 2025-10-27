@@ -1,5 +1,5 @@
 const express = require('express');
-const { add_catagory, product_upload, product_update, admin_approval } = require('../../controller/productController');
+const { add_catagory, product_upload, product_update, admin_approval, give_review } = require('../../controller/productController');
 const multer  = require('multer');
 const tokenVerify = require('../../../middelWares/tokenVerify');
 const roleChecker = require('../../../middelWares/roleCheckerUser');
@@ -16,5 +16,6 @@ productRoute.post( '/category', tokenVerify, roleChecker(['admin', 'staff']), up
 productRoute.post('/uploadProduct', tokenVerify, roleChecker(['admin', 'staff']) , uploadMiddleware , product_upload);
 productRoute.post('/updateProduct', tokenVerify, roleChecker(['admin', 'staff']) , uploadMiddleware , product_update);
 productRoute.post('/updateStatus', tokenVerify, roleChecker(['admin']) ,  admin_approval);
+productRoute.post('/giveReview', tokenVerify  ,  give_review);
 
 module.exports = productRoute;
