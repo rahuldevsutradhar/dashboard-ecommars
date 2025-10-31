@@ -239,9 +239,20 @@ const singleProduct = async (req, res)=>{
 // --------------------------------get All product-----------------------------------------
 const get_all_product  = async (req , res)=>{
   try{
- const  productLimitNo =  req.query.productLimit || 10
- const allProduct  = await productModel.find().limit(productLimitNo)
-  res.status(200).send(allProduct)
+    const {productLimit , searchProductName , pageNo} = req.query
+ const  productLimitNo = productLimit || 10
+ const paginationPage = pageNo || 1
+ const skipProduct = (paginationPage - 1)* productLimitNo
+ let searchProduct = {}
+ searchProductName && (searchProduct.productTitle = {$regex : new RegExp(searchProductName , 'i')})
+
+ const allProduct  = await productModel.find(searchProduct).limit(productLimitNo).skip(skipProduct)
+  
+ const productPage = await productModel.find(searchProduct)
+ const totalPages = productPage.length / productLimitNo
+
+  console.log(searchProduct);
+  res.status(200).send({totalPages:Math.ceil(totalPages) , Limit: productLimitNo , skip: skipProduct , products: allProduct })
 
   }catch(err){
     console.log(err);  
