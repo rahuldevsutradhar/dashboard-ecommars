@@ -236,11 +236,28 @@ const singleProduct = async (req, res)=>{
 
 }
 
+// --------------------------------get All product-----------------------------------------
+const get_all_product  = async (req , res)=>{
+  try{
+ const  productLimitNo =  req.query.productLimit || 10
+ const allProduct  = await productModel.find().limit(productLimitNo)
+  res.status(200).send(allProduct)
+
+  }catch(err){
+    console.log(err);  
+    res.status(500).send('Internal Server Error')
+  }
+}
+
+
+
+
+
+
+
 
 module.exports = { add_catagory ,
-   product_upload , 
-   product_update ,
-    admin_approval ,
-    give_review ,
-    singleProduct
+   product_upload ,  product_update ,
+    admin_approval ,  give_review ,
+    singleProduct, get_all_product
   };
