@@ -193,6 +193,19 @@ const updateProfileController = async (req, res) => {
     }
 };
 
+// ----------- single profile ----------------
+const single_profile =async (req , res) =>{
+    try{
+        const exsitUser =  await authModel.findOne({email:req.user.email}).select('-otp -otpExpaireTime ')
+        if(!exsitUser) return res.status(404).send('user not found')
+        res.status(200).send(exsitUser)
+    }catch(err){
+        console.log(err)
+        res.status(500).send('Internal Server Error')
+        
+    }
+}
 
-
-module.exports = { registrationController , otpVerification, reSendOtp, loginController, updateProfileController }
+module.exports = { registrationController , otpVerification, reSendOtp, loginController, updateProfileController,
+        single_profile
+ }

@@ -1,5 +1,5 @@
 const express = require('express');
-const { add_catagory, product_upload, product_update, admin_approval, give_review, singleProduct, get_all_product } = require('../../controller/productController');
+const { add_catagory, product_upload, product_update, admin_approval, give_review, singleProduct, get_all_product, delete_product } = require('../../controller/productController');
 const multer  = require('multer');
 const tokenVerify = require('../../../middelWares/tokenVerify');
 const roleChecker = require('../../../middelWares/roleCheckerUser');
@@ -19,5 +19,6 @@ productRoute.post('/updateStatus', tokenVerify, roleChecker(['admin']) ,  admin_
 productRoute.post('/giveReview', tokenVerify  ,  give_review);
 productRoute.get('/singleProduct/:slug',   singleProduct);
 productRoute.get('/allProduct',   get_all_product);
+productRoute.delete('/deleteProduct',   delete_product);
 
 module.exports = productRoute;

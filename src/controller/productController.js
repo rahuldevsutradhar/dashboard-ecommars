@@ -260,15 +260,25 @@ const get_all_product  = async (req , res)=>{
   }
 }
 
+// --------------------------------get single product-----------------------------------------
 
+const delete_product = async (req, res)=>{
+  try{
+    const {productId} = req.body
 
+    await productModel.findByIdAndDelete(productId)
+    
+    res.status(200).send('product deleted')
 
-
-
+  }catch(err){
+    console.log(err)
+    res.status(500).send('Internal server error')
+  }
+}
 
 
 module.exports = { add_catagory ,
    product_upload ,  product_update ,
     admin_approval ,  give_review ,
-    singleProduct, get_all_product
+    singleProduct, get_all_product , delete_product
   };
