@@ -198,14 +198,26 @@ const single_profile =async (req , res) =>{
     try{
         const exsitUser =  await authModel.findOne({email:req.user.email}).select('-otp -otpExpaireTime ')
         if(!exsitUser) return res.status(404).send('user not found')
-        res.status(200).send(exsitUser)
+        res.status(200).send('account create sucessfull')
     }catch(err){
         console.log(err)
         res.status(500).send('Internal Server Error')
-        
+    }
+}
+// ----------- delete profile ----------------
+const delete_profile =async (req , res) =>{
+    try{
+        const {userId} = req.body
+        const exsitUser = await authModel.findOne({_id: userId}).select('-otp -otpExpaireTime')
+        if(exsitUser.userRole === 'admin') return res.status(401).send('admin can not deleted admin account')
+            await authModel.findByIdAndDelete(userId)
+        res.status(200).send('User account deleted sucessfull')
+    }catch(err){
+        console.log(err)
+        res.status(500).send('Internal Server Error')
     }
 }
 
 module.exports = { registrationController , otpVerification, reSendOtp, loginController, updateProfileController,
-        single_profile
+        single_profile , delete_profile
  }

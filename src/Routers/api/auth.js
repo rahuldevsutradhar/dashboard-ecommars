@@ -1,5 +1,5 @@
 const express = require('express');
-const { registrationController, otpVerification, reSendOtp, loginController, updateProfileController, single_profile } = require('../../controller/authController');
+const { registrationController, otpVerification, reSendOtp, loginController, updateProfileController, single_profile, delete_profile } = require('../../controller/authController');
 const tokenVerify = require('../../../middelWares/tokenVerify');
 const { product_upload } = require('../../controller/productController'); // ✅ fixed line
 const multer = require('multer');
@@ -13,5 +13,6 @@ authRoute.post('/reSendOtp', reSendOtp);
 authRoute.post('/login', loginController);
 authRoute.post('/updateProfile', tokenVerify, upload.single('avatar'), updateProfileController);
 authRoute.get('/singleProfile',tokenVerify ,  single_profile);
+authRoute.delete('/deleteProfile',  delete_profile);
 
 module.exports = authRoute;
